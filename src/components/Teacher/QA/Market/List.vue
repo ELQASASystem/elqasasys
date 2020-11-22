@@ -8,7 +8,7 @@
     >
       <template slot="extra">
         <a-button type="primary">
-          <router-link to="/teacher/qa/list">答题列表</router-link>
+          <router-link to="/teacher/qa/list">问答列表</router-link>
         </a-button>
       </template>
     </a-page-header>

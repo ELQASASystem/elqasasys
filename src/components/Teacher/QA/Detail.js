@@ -49,7 +49,7 @@ export default {
 
             Axios.get('/apis/questions/question/' + this.Question.id).then(res => {
 
-                console.log('成功获取答题数据：', res.data)
+                console.log('成功获取问答数据：', res.data)
 
                 let list = {}
                 for (let i = 0; i < res.data.mems.length; i++) {
@@ -76,7 +76,7 @@ export default {
                 this.Question.loading = false
 
             }).catch(err => {
-                console.error('获取答题数据失败：' + err)
+                console.error('获取问答数据失败：' + err)
                 this.Question.loading = false
             })
 
@@ -119,7 +119,7 @@ export default {
 
         },
 
-        displayQuestion() { // 显示问题数据
+        displayQuestion() { // 显示问答数据
 
             { // 题目
                 this.Question.type = {0: '选择题', 1: '简答题'}[this.Question.object.type] // 类型

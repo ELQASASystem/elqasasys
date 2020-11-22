@@ -2,16 +2,16 @@
   <main class="wrapper">
 
     <a-page-header
-        title="答题列表"
-        sub-title="存储您所有新建过的答题"
+        title="问答列表"
+        sub-title="存储您所有的问答数据"
         @back="() => $router.push({path: '/home'})"
     >
       <template slot="extra">
         <a-button type="primary">
-          <router-link to="/teacher/qa/market/list">答题市场</router-link>
+          <router-link to="/teacher/qa/market/list">问题市场</router-link>
         </a-button>
         <a-button type="primary">
-          <router-link to="/teacher/qa/new">新增答题</router-link>
+          <router-link to="/teacher/qa/new">新增问答</router-link>
         </a-button>
       </template>
     </a-page-header>
@@ -61,7 +61,7 @@ export default {
         this.questionList = res.data.questions
         this.questionListLoad = false
 
-        console.log("成功拉取答题数据：", res.data.questions)
+        console.log("成功拉取问答数据：", res.data.questions)
 
       }).catch(err => {
         console.error("获取数据失败：", err)

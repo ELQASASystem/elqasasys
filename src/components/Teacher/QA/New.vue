@@ -2,13 +2,13 @@
   <main class="wrapper">
 
     <a-page-header
-        title="新建答题"
-        sub-title="新建一个答题"
+        title="新建问答"
+        sub-title="新建一个问答"
         @back="() => $router.push({path: '/teacher/qa/list'})"
     >
       <template slot="extra">
         <router-link to="/teacher/qa/list">
-          <a-button type="primary">答题列表</a-button>
+          <a-button type="primary">问答列表</a-button>
         </router-link>
       </template>
     </a-page-header>
