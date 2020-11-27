@@ -1,5 +1,5 @@
 import Axios from 'axios'
-import {Chart} from '@antv/g2'
+import {Chart} from 'g2'
 
 export default {
     name: "Detail",
