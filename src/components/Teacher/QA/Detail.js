@@ -138,7 +138,7 @@ export default {
             this.updateHeader()
             this.calc()
 
-            { // 图表
+            try { // 图表
                 this.histogram(0, 'data-chart-right_count', [{
                     type: '正确人数 ' + this.Statistics.rightCount, value: this.Statistics.rightCount
                 }])
@@ -146,6 +146,8 @@ export default {
                     type: '错误人数 ' + this.Statistics.wrongCount, value: this.Statistics.wrongCount
                 }])
                 this.histogram(2, 'data-chart-easy_wrong', this.Statistics.wrongList)
+            } catch (e) {
+                console.error('图表渲染错误：', e)
             }
 
         },

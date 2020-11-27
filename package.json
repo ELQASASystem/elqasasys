@@ -10,7 +10,6 @@
   "dependencies": {
     "@antv/g2": "^4.0.15",
     "ant-design-vue": "^1.7.2",
-    "axios": "^0.21.0",
     "core-js": "^3.6.5",
     "vue": "^2.6.11",
     "vue-cookies": "^1.7.4",
