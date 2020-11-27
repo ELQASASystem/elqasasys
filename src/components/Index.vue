@@ -111,7 +111,7 @@ export default {
 
         this.$cookies.set('account', u, '30d')
         this.$notification.success({message: '登录成功', description: ''})
-        this.$router.push({path: '/answer/tea/list'})
+        this.$router.push({path: '/teacher/qa/list'})
 
       }).catch(err => {
         console.log("登录失败：", err)
