@@ -22,9 +22,13 @@
 
             <a-form-model-item label="作答群">
               <a-select mode="multiple" placeholder="请选择欲参与答题的群">
-                <!--网络请求获取群列表-->
-                <a-select-option value="1000">英语群</a-select-option>
-                <a-select-option value="1001">物理群</a-select-option>
+                <a-select-option
+                    v-for="g in groupList"
+                    :key="g.id"
+                    :value="g.id"
+                >
+                  {{ g.name }}
+                </a-select-option>
               </a-select>
             </a-form-model-item>
 
@@ -34,28 +38,24 @@
 
             <a-form-model-item label="题目图片">
               <a-upload
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
+                  action="/apis/upload/picture"
                   list-type="picture-card"
               >
                 <div>
                   <a-icon type="plus"/>
                   <div class="ant-upload-text">
-                    Upload
+                    上传图片
                   </div>
                 </div>
               </a-upload>
-              <a-modal>
-                <img alt="example" style="width: 100%"/>
-              </a-modal>
-
 
             </a-form-model-item>
 
             <a-form-model-item label="题目类型">
               <a-radio-group v-model="form.resource">
                 <a-radio value="1">选择题</a-radio>
-                <a-radio value="2" disabled>简答题</a-radio>
-                <a-radio value="3" disabled>多选题</a-radio>
+                <a-radio value="2">简答题</a-radio>
+                <a-radio value="3">多选题</a-radio>
               </a-radio-group>
             </a-form-model-item>
 
@@ -80,8 +80,13 @@
             <a-form-model-item label="答案">
 
               <a-select default-value="A">
-                <a-select-option value="A">A</a-select-option>
-                <a-select-option value="B">B</a-select-option>
+                <a-select-option
+                    v-for="(opt, i) in dynamicValidateForm.domains"
+                    :value="abc[i]"
+                    :key="abc[i]"
+                >
+                  {{ abc[i] }}
+                </a-select-option>
               </a-select>
 
             </a-form-model-item>
@@ -132,12 +137,15 @@
 
 
 <script>
+import Axios from 'axios'
+
 export default {
   name: "New",
   data() {
     return {
       labelCol: {span: 4},
       wrapperCol: {span: 14},
+      groupList: [],
       form: {
         name: '',
         region: undefined,
@@ -146,7 +154,6 @@ export default {
         type: [],
         resource: '',
         desc: '',
-
       },
 
 
@@ -195,7 +202,15 @@ export default {
     },
     onSubmit(e) {
       console.log(e)
+      this.$notification.success({message: '题目创建成功', description: ''})
     }
+  },
+  mounted() {
+    Axios.get('/apis/group/list').then(res => {
+      this.groupList = res.data
+    }).catch(err => {
+      console.error('获取群列表错误：', err)
+    })
   }
 }
 </script>
