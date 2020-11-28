@@ -29,6 +29,16 @@ const routes = [
         name: 'QAMarketList',
         component: () => import('./components/Teacher/QA/Market/List.vue')
     },
+    {
+        path: '/teacher/ws/list',
+        name: 'WSList',
+        component: () => import('./components/Teacher/WS/List.vue')
+    },
+    {
+        path: '/teacher/ws/detail/:id',
+        name: 'WSDetail',
+        component: () => import('./components/Teacher/WS/Detail.vue')
+    },
 ]
 
 const router = new VueRouter({
