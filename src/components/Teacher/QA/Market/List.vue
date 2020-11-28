@@ -72,11 +72,13 @@
           mode="multiple"
           placeholder="请选择欲参与答题的群"
           @change="changeEdit"
-          style="width: 100%">
+          class="select"
+      >
         <a-select-option
             v-for="g in groupList"
             :key="g.id"
-            :value="g.id">
+            :value="g.id"
+        >
           {{ g.name }}
         </a-select-option>
       </a-select>
@@ -188,6 +190,10 @@ export default {
 
 .btn-add {
   margin: 0 8px;
+}
+
+.select {
+  width: 100%
 }
 
 .edit-btn {
