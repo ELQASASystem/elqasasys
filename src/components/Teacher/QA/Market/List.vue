@@ -16,8 +16,8 @@
     <div class="list">
 
       <a-radio-group
-          v-model="subject"
           default-value="1"
+          v-model="subject"
           button-style="solid"
           @change="onSubjectChange"
       >
@@ -33,29 +33,60 @@
         <a-radio-button value="10">其他</a-radio-button>
       </a-radio-group>
 
-      <a-divider/>
-
       <a-list item-layout="horizontal" :data-source="questionList" :loading="questionListLoad">
         <a-list-item slot="renderItem" slot-scope="item">
 
           <div>
             <div v-for="q in JSON.parse(item.question)" :key="q.id">
               <template v-if="q.type === 'text'">{{ q.text }}</template>
-              <img
-                  v-else :src="'/assets/question/pictures/'+q.path"
-                  class="question-img" alt="问题图片"
-              >
+              <img v-else :src="'/assets/question/pictures/'+q.path" class="question-img" alt="问题图片"><br>
+              <template>
+                <a-tag
+                    color="purple"
+                    v-for="opt in JSON.parse(item.options)"
+                    :key="opt.type"
+                >
+                  {{ opt.type + "：" + opt.body }}
+                </a-tag>
+
+              </template>
             </div>
           </div>
           <a-button
-              :data-id="item.id"
-              @click="copy(item.id)"
+              @click="edit(item.id)"
               class="btn-add">添加
           </a-button>
 
         </a-list-item>
       </a-list>
     </div>
+
+    <a-drawer
+        title="创建新问题"
+        width="480"
+        :visible="editDrawer"
+        @close="closeEdit"
+    >
+      <h3>作答群：</h3>
+      <a-select
+          mode="multiple"
+          placeholder="请选择欲参与答题的群"
+          @change="changeEdit"
+          style="width: 100%">
+        <a-select-option
+            v-for="g in groupList"
+            :key="g.id"
+            :value="g.id">
+          {{ g.name }}
+        </a-select-option>
+      </a-select>
+
+      <div class="edit-btn">
+        <a-button type="primary" @click="submitEdit">提交</a-button>
+        <a-button @click="closeEdit">取消</a-button>
+      </div>
+
+    </a-drawer>
 
   </main>
 </template>
@@ -64,12 +95,16 @@
 import Axios from 'axios'
 
 export default {
-  name: "List",
+  name: "QAMarketList",
   data() {
     return {
-      subject: 0,
+      subject: 1,
       questionList: [],
-      questionListLoad: true
+      questionListLoad: true,
+      groupList: [],
+      editDrawer: false,
+      selectedQuestion: 0,
+      selectedGroup: []
     }
   },
   methods: {
@@ -81,14 +116,12 @@ export default {
           throw '数据为空'
         }
 
-        console.log('成功获取问题市场数据：')
-        console.log(res.data)
-
+        console.log('成功获取问题市场数据：', res.data)
         this.questionList = res.data
 
       }).catch(err => {
 
-        console.error('获取问题市场失败：' + err)
+        console.error('获取问题市场失败：', err)
         this.$notification.error({message: '这个领域还没有人上传哦', description: ''})
         this.questionList = []
 
@@ -100,28 +133,45 @@ export default {
       this.fetchMarket()
     },
 
-    copy(i) {
+    edit(i) {
+      this.editDrawer = true
+      this.selectedQuestion = i
+    },
+    closeEdit() {
+      this.editDrawer = false
+    },
+    changeEdit(v) {
+      this.selectedGroup = v
+    },
+    submitEdit() {
+      for (let i = 0; i < this.selectedGroup.length; i++) {
+        this.copy(this.selectedQuestion, this.selectedGroup[i])
+      }
+    },
 
-      Axios.get(`/apis/market/${i}/copy?user=${this.$cookies.get('account')}`).then(res => {
+    copy(i, g) {
+
+      Axios.get(`/apis/market/${i}/copy?u=${this.$cookies.get('account')}&t=` + g).then(res => {
 
         if (res.message === 'no') {
           throw '系统失败'
         }
 
-        let scs = '成功复制问题'
-        console.log(scs)
-        this.$notification.success({message: scs, description: ''})
-
+        this.$notification.success({message: '成功复制问题', description: '群号：' + g})
       }).catch(err => {
-
-        console.error('复制问题失败：' + err)
+        console.error('复制问题失败：', err)
         this.$notification.error({message: '现在无法完成问题复制', description: ''})
-
       })
     }
   },
   mounted() {
     this.fetchMarket()
+
+    Axios.get('/apis/group/list').then(res => {
+      this.groupList = res.data
+    }).catch(err => {
+      console.error('获取群列表错误：', err)
+    })
   }
 }
 </script>
@@ -137,6 +187,14 @@ export default {
 }
 
 .btn-add {
+  margin: 0 8px;
+}
+
+.edit-btn {
+  margin-top: 64px;
+}
+
+.edit-btn > button {
   margin: 0 8px;
 }
 </style>
