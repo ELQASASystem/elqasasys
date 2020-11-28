@@ -84,7 +84,7 @@ export default {
         },
         openws() { // 开启 WS 连接
 
-            let ws = new WebSocket(`wss://${location.host}/question`)
+            let ws = new WebSocket(this.address() + '/question')
             ws.onopen = () => {
                 ws.send(String(this.Question.id))
                 setInterval(() => {
@@ -283,8 +283,18 @@ export default {
                 this.$notification.success({message: '表扬失败', description: ''})
                 console.error('表扬失败：' + err)
             })
-        }
+        },
 
+        address() {
+            let p = 'wss:'
+            switch (location.protocol) {
+                case 'http:':
+                    p = 'ws:'
+                    break
+            }
+
+            return p + '//' + location.host
+        }
     },
     mounted() {
         this.fetchData()

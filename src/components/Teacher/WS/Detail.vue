@@ -79,7 +79,7 @@ export default {
     },
     openWs() {
 
-      let ws = new WebSocket(`ws://${location.host}/stream/word_statistics`)
+      let ws = new WebSocket(this.address() + '/stream/word_statistics')
       ws.onopen = () => {
         ws.send(this.id)
         setInterval(() => {
@@ -133,6 +133,17 @@ export default {
 
       this.chart.changeData(this.newDv(data))
     },
+
+    address() {
+      let p = 'wss:'
+      switch (location.protocol) {
+        case 'http:':
+          p = 'ws:'
+          break
+      }
+
+      return p + '//' + location.host
+    }
   },
   mounted() {
     this.init()
