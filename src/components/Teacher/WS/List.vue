@@ -12,7 +12,6 @@
       <router-link
           v-for="g in groupList"
           :key="g.id"
-
           :to="'/teacher/ws/detail/'+g.id"
           class="card"
       >
@@ -28,7 +27,7 @@
 import Axios from 'axios'
 
 export default {
-  name: "WordStatisticsList",
+  name: "WSList",
   data() {
     return {
       groupList: [],
