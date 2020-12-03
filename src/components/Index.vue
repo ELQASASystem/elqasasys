@@ -99,20 +99,14 @@ export default {
 
         console.log("登录请求：", values)
         this.login(values.userName, values.password)
-
       })
     },
 
     login(u, p) {
 
-      Axios.post(`/apis/login/${u}?p=` + p).then(res => {
-
-        console.log("登录信息：", res.data)
-
-        this.$cookies.set('account', u, '30d')
+      Axios.post(`/apis/login/${u}?p=` + p).then(() => {
         this.$notification.success({message: '登录成功', description: ''})
         this.$router.push({path: '/teacher/qa/list'})
-
       }).catch(err => {
         console.log("登录失败：", err)
         this.$notification.error({message: '登录失败', description: '请检查帐号密码是否有误'})
