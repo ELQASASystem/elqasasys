@@ -41,7 +41,17 @@ export default {
                 wrongList: [{type: '暂无数据', value: 0}] // 回答错误有序列表
             },
 
-            CHARTData: {}
+            CHARTData: {},
+            columns: [
+                {
+                    dataIndex: 'answerer_id',
+                    key: 'answerer_id',
+                    slots: {title: 'customTitle'},
+                    scopedSlots: {customRender: 'answerer_id'},
+                },
+                {title: '回答答案', dataIndex: 'answer', key: 'answer',},
+                {title: '回答时间', dataIndex: 'time', key: 'time',},
+            ],
         }
     },
     methods: {

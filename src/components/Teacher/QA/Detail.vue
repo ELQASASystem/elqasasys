@@ -165,18 +165,21 @@
 
         </a-tab-pane>
 
+        <a-tab-pane key="3" tab="时间轴">
+          <a-timeline>
+            <a-timeline-item v-for="ans in Question.object.answer" :key="ans.id">
+              {{ ans.time }} 「{{ groupMemList[ans.answerer_id].name }}」作答：{{ ans.answer }}
+            </a-timeline-item>
+          </a-timeline>
+        </a-tab-pane>
+
         <a-tab-pane key="2" tab="全部信息">
-
-          <a-list item-layout="horizontal" :data-source="Question.object.answer">
-            <a-list-item slot="renderItem" slot-scope="item">
-              <div>
-                <p>
-                  {{ groupMemList[item.answerer_id].name }}
-                </p>
-              </div>
-            </a-list-item>
-          </a-list>
-
+          <a-table :columns="columns" :data-source="Question.object.answer">
+            <a slot="answerer_id" slot-scope="item">{{ groupMemList[item].name }}</a>
+            <span slot="customTitle"><a-icon type="smile-o"/> 姓名</span>
+            <span slot="answer" slot-scope="item">{{ item }}</span>
+            <span slot="time" slot-scope="item">{{ item }}</span>
+          </a-table>
         </a-tab-pane>
 
 
