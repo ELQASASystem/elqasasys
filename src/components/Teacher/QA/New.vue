@@ -18,83 +18,73 @@
       <a-tabs default-active-key="1">
         <a-tab-pane key="1" tab="单个新建">
 
-          <a-form-model :model="form" :label-col="labelCol" :wrapper-col="wrapperCol">
+          <a-form-model :model="form" :label-col="{span: 4}" :wrapper-col="{span: 14}">
 
             <a-form-model-item label="作答群">
-              <a-select mode="multiple" placeholder="请选择欲参与答题的群">
-                <a-select-option
-                    v-for="g in groupList"
-                    :key="g.id"
-                    :value="g.id"
-                >
+              <a-select v-model="form.target" mode="multiple" placeholder="请选择欲参与答题的群">
+                <a-select-option v-for="g in groupList" :key="g.id" :value="g.id">
                   {{ g.name }}
                 </a-select-option>
               </a-select>
             </a-form-model-item>
 
             <a-form-model-item label="题目">
-              <a-input v-model="form.desc" type="textarea"/>
+              <a-input v-model="form.question" type="textarea"/>
             </a-form-model-item>
 
             <a-form-model-item label="题目图片">
-              <a-upload
-                  action="/apis/upload/picture"
-                  list-type="picture-card"
-              >
+              <a-upload action="/apis/upload/picture" list-type="picture-card">
                 <div>
                   <a-icon type="plus"/>
-                  <div class="ant-upload-text">
-                    上传图片
-                  </div>
+                  <div class="ant-upload-text">上传图片</div>
                 </div>
               </a-upload>
-
             </a-form-model-item>
 
             <a-form-model-item label="题目类型">
-              <a-radio-group v-model="form.resource">
-                <a-radio value="1">选择题</a-radio>
-                <a-radio value="2">简答题</a-radio>
-                <a-radio value="3">多选题</a-radio>
+              <a-radio-group v-model="form.type">
+                <a-radio value="0">选择题</a-radio>
+                <a-radio value="1">简答题</a-radio>
+                <a-radio value="2">多选题</a-radio>
               </a-radio-group>
             </a-form-model-item>
 
             <a-form-model-item label="选项">
-              <a-button type="dashed" @click="addDomain">
+              <a-button type="dashed" @click="addOptions">
                 <a-icon type="plus"/>
                 新增选项
               </a-button>
-              <a-button type="dashed" @click="removeOp">
+              <a-button type="dashed" @click="removeOptions">
                 <a-icon type="plus"/>
                 删除选项
               </a-button>
             </a-form-model-item>
+
             <a-form-model-item
-                v-for="(domain, i) in dynamicValidateForm.domains"
-                :label="abc[i]"
-                :key="domain.key"
+                v-for="(opt, i) in form.options"
+                :label="opt.type"
+                :key="opt.type"
             >
-              <a-input placeholder="请输入选项答案"/>
+              <a-input v-model="form.options[i].body" placeholder="请输入选项答案"/>
             </a-form-model-item>
 
             <a-form-model-item label="答案">
 
-              <a-select default-value="A">
+              <a-select v-model="form.key" default-value="A">
                 <a-select-option
-                    v-for="(opt, i) in dynamicValidateForm.domains"
-                    :value="abc[i]"
-                    :key="abc[i]"
+                    v-for="opt in form.options"
+                    :value="opt.type"
+                    :key="opt.type"
                 >
-                  {{ abc[i] }}
+                  {{ opt.type }}
                 </a-select-option>
               </a-select>
 
             </a-form-model-item>
 
             <a-form-model-item label="分享至问题市场">
-              <a-switch v-model="form.delivery"/>
+              <a-switch v-model="form.market"/>
             </a-form-model-item>
-
 
             <a-form-model-item :wrapper-col="{ span: 14, offset: 4 }">
               <a-button type="primary" @click="onSubmit">
@@ -102,7 +92,6 @@
               </a-button>
             </a-form-model-item>
           </a-form-model>
-
 
         </a-tab-pane>
 
@@ -143,47 +132,18 @@ export default {
   name: "New",
   data() {
     return {
-      labelCol: {span: 4},
-      wrapperCol: {span: 14},
       groupList: [],
       form: {
-        name: '',
-        region: undefined,
-        date1: undefined,
-        delivery: false,
-        type: [],
-        resource: '',
-        desc: '',
+        type: 0,
+        question: '',
+        target: [],
+        options: [{type: 'A', body: ''}, {type: 'B', body: ''}],
+        key: '',
+        market: false
       },
-
 
       abc: ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V',
         'W', 'X', 'Y', 'Z'],
-
-      formItemLayout: {
-        labelCol: {
-          xs: {span: 24},
-          sm: {span: 4},
-        },
-        wrapperCol: {
-          xs: {span: 24},
-          sm: {span: 20},
-        },
-      },
-      formItemLayoutWithOutLabel: {
-        wrapperCol: {
-          xs: {span: 24, offset: 0},
-          sm: {span: 20, offset: 4},
-        },
-      },
-      dynamicValidateForm: {
-        domains: [{
-          value: '', key: Date.now(),
-        }, {
-          value: '', key: Date.now(),
-        }],
-      },
-
     }
   },
   methods: {
@@ -191,17 +151,17 @@ export default {
       console.log(info)
     },
 
-    addDomain() {
-      this.dynamicValidateForm.domains.push({
-        value: '',
-        key: Date.now(),
+    addOptions() {
+      this.form.options.push({
+        type: this.abc[this.form.options.length],
+        body: ''
       });
     },
-    removeOp() {
-      this.dynamicValidateForm.domains.pop()
+    removeOptions() {
+      this.form.options.pop()
     },
-    onSubmit(e) {
-      console.log(e)
+    onSubmit() {
+      console.log(this.form)
       this.$notification.success({message: '题目创建成功', description: ''})
     }
   },
