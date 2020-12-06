@@ -4,6 +4,7 @@ import Cookie from 'vue-cookies'
 
 import App from './App.vue'
 import router from './router.js'
+import './registerServiceWorker'
 
 Vue.use(Antd)
 Vue.use(Cookie)
