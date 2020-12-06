@@ -1,6 +1,6 @@
 {
   "name": "elqasasys",
-  "version": "0.1.0",
+  "version": "20.12.6",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
