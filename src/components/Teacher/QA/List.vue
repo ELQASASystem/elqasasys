@@ -50,7 +50,7 @@ export default {
   methods: {
     fetchQuestionList() {
 
-      Axios.get('/apis/questions/list?u=' + this.$cookies.get('account')).then(res => {
+      Axios.get('/apis/questions/list?u=' + this.$cookies.get('user')).then(res => {
 
         for (let i = 0; i < res.data.groups.length; i++) {
           this.groupList[res.data.groups[i].id] = res.data.groups[i].name

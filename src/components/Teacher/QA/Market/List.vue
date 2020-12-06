@@ -153,7 +153,7 @@ export default {
 
     copy(i, g) {
 
-      Axios.get(`/apis/market/${i}/copy?u=${this.$cookies.get('account')}&t=` + g).then(res => {
+      Axios.get(`/apis/market/${i}/copy?u=${this.$cookies.get('user')}&t=` + g).then(res => {
 
         if (res.message === 'no') {
           throw '系统失败'
