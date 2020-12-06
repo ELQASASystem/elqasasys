@@ -160,6 +160,7 @@ export default {
         }
 
         this.$notification.success({message: '成功复制问题', description: '群号：' + g})
+        this.closeEdit()
       }).catch(err => {
         console.error('复制问题失败：', err)
         this.$notification.error({message: '现在无法完成问题复制', description: ''})
