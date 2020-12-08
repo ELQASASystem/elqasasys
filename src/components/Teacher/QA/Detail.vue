@@ -168,14 +168,14 @@
         <a-tab-pane key="3" tab="时间轴">
           <a-timeline>
             <a-timeline-item v-for="ans in Question.object.answer" :key="ans.id">
-              {{ ans.time }} 「{{ groupMemList[ans.answerer_id].name }}」作答：{{ ans.answer }}
+              {{ ans.time }} 「{{ studentName(ans.answerer_id) }}」作答：{{ ans.answer }}
             </a-timeline-item>
           </a-timeline>
         </a-tab-pane>
 
         <a-tab-pane key="2" tab="全部信息">
           <a-table :columns="columns" :data-source="Question.object.answer">
-            <a slot="answerer_id" slot-scope="item">{{ groupMemList[item].name }}</a>
+            <a slot="answerer_id" slot-scope="item">{{ studentName(item) }}</a>
             <span slot="customTitle"><a-icon type="smile-o"/> 姓名</span>
             <span slot="answer" slot-scope="item">{{ item }}</span>
             <span slot="time" slot-scope="item">{{ item }}</span>

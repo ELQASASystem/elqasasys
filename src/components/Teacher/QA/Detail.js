@@ -295,6 +295,15 @@ export default {
             })
         },
 
+        studentName(i) {
+            try {
+                return this.groupMemList[i].name
+            } catch (err) {
+                console.error('找不到学生名：', i, '。', err)
+                return ''
+            }
+        },
+
         address() {
             let p = 'wss:'
             switch (location.protocol) {
